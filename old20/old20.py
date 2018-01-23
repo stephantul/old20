@@ -32,7 +32,7 @@ def old_n(words, n):
         raise ValueError("n should be a positive number.")
     if len(words) < n:
         raise ValueError("You have fewer words than the value of your n. "
-                         "Please lower n to a lower value.")
+                         "Please lower n.")
 
     old_words = defaultdict(list)
 
