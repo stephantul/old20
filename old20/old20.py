@@ -4,6 +4,7 @@ from functools import partial
 from itertools import combinations
 from tqdm import tqdm
 from collections import defaultdict
+from scipy.misc import comb
 
 
 def old_n(words, n):
@@ -22,17 +23,18 @@ def old_n(words, n):
     The old score for a given n.
 
     """
-    words = defaultdict(list)
+    old_words = defaultdict(list)
 
     # Damerau-Levenshtein distance is symmetric
     # So we only need to calculate the distance
     # between each pair once.
-    for a, b in tqdm(combinations(words, 2)):
+    total = comb(len(words), 2)
+    for a, b in tqdm(combinations(words, 2), total=total):
         dist = damerau_levenshtein_distance(a, b)
-        words[a].append(dist)
-        words[b].append(dist)
+        old_words[a].append(dist)
+        old_words[b].append(dist)
 
-    return {k: list(sorted(v))[:n] / n for k, v in words.items()}
+    return {k: sum(sorted(v)[:n]) / n for k, v in old_words.items()}
 
 
 old20 = partial(old_n, n=20)
