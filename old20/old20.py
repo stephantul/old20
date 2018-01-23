@@ -7,6 +7,11 @@ from collections import defaultdict
 from scipy.misc import comb
 
 
+def old_all(words):
+    """Calculate the OLD distance over all words."""
+    return old_n(words, len(words))
+
+
 def old_n(words, n):
     """
     Calculate the OLD distance for a given n.
@@ -23,6 +28,10 @@ def old_n(words, n):
     The old score for a given n.
 
     """
+    if len(words) < n:
+        raise ValueError("You have fewer words than the value of your n. "
+                         "Please lower n to a lower value.")
+
     old_words = defaultdict(list)
 
     # Damerau-Levenshtein distance is symmetric
