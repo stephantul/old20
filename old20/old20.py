@@ -4,7 +4,12 @@ from functools import partial
 from itertools import combinations
 from tqdm import tqdm
 from collections import defaultdict
-from scipy.misc import comb
+from math import factorial
+
+
+def comb(n, k):
+    """Calculate the number of combinations."""
+    return factorial(n) / (factorial(k) * factorial(n - k))
 
 
 def old_all(words):
