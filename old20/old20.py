@@ -7,7 +7,7 @@ from collections import defaultdict
 from math import factorial
 
 
-def comb(n, k):
+def num_combinations(n, k):
     """Calculate the number of combinations."""
     return factorial(n) / (factorial(k) * factorial(n - k))
 
@@ -44,7 +44,7 @@ def old_n(words, n):
     # Damerau-Levenshtein distance is symmetric
     # So we only need to calculate the distance
     # between each pair once.
-    total = comb(len(words), 2)
+    total = num_combinations(len(words), 2)
     for a, b in tqdm(combinations(words, 2), total=total):
         dist = damerau_levenshtein_distance(a, b)
         old_words[a].append(dist)
