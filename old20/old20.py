@@ -12,12 +12,12 @@ def num_combinations(n, k):
     return factorial(n) / (factorial(k) * factorial(n - k))
 
 
-def old_all(words):
+def old_all(words, show_progressbar=True):
     """Calculate the OLD distance over all words."""
-    return old_n(words, len(words))
+    return old_n(words, len(words), show_progressbar=show_progressbar)
 
 
-def old_n(words, n):
+def old_n(words, n, show_progressbar=True):
     """
     Calculate the OLD distance for a given n.
 
@@ -45,7 +45,9 @@ def old_n(words, n):
     # So we only need to calculate the distance
     # between each pair once.
     total = num_combinations(len(words), 2)
-    for a, b in tqdm(combinations(words, 2), total=total):
+    for a, b in tqdm(combinations(words, 2),
+                     total=total,
+                     disable=not show_progressbar):
         dist = damerau_levenshtein_distance(a, b)
         old_words[a].append(dist)
         old_words[b].append(dist)
