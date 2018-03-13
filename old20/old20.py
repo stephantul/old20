@@ -38,6 +38,9 @@ def old_n(words, n, show_progressbar=True):
     if len(words) <= n:
         raise ValueError("The number of words you have is lower than or equal "
                          "to the value of your n. Please lower n.")
+    if len(set(words)) != len(words):
+        raise ValueError("There are duplicates in your dataset. Please remove"
+                         " these, as they will make your estimates unreliable")
 
     old_words = defaultdict(list)
 
