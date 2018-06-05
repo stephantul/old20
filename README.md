@@ -1,6 +1,8 @@
 # old20
 Calculate Yarkoni, Baloto & Yap's OLD20.
 
+* **Warning** this implementation of OLD20 uses the Damerau Levenshtein Distance instead of plain Levenshtein distance. This change has a small but non-significant effect in all experiments we ran. Nonetheless, it is important to be aware of the difference.
+
 The OLD20 distance is defined as the average Orthographic Levenshtein Distance (OLD) to the 20 closest neighbors for a given word in a given corpus.
 
 If you use the code in this repository, please cite the following paper:
@@ -21,7 +23,8 @@ If you use the code in this repository, please cite the following paper:
 ### Example
 
 ```python
-from old20 import old20
+import numpy as np
+from old20 import old20, old_subloop
 # Assumes some wordlist.
 wordlist = open("mywords.txt").readlines()
 
