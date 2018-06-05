@@ -23,7 +23,7 @@ def old_subloop(words,
     """Calculate the distance from each word to each other word."""
     old_words = np.zeros((len(words), len(words)))
 
-    # Damerau-Levenshtein distance is symmetric
+    # Levenshtein distance is symmetric
     # So we only need to calculate the distance
     # between each pair once.
     total = num_combinations(len(words), 2)
