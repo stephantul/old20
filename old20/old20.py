@@ -70,13 +70,16 @@ def old_n(words,
                        function)
 
     output = []
-    for x in n:
+    max_n = max(n)
 
-        old_vals = np.partition(vals,
-                                kth=x+1,
-                                axis=1)[:, :x+1]
-        old_vals = np.sort(old_vals, axis=1)[:, 1: x+1]
-        output.append(old_vals.mean(1))
+    old_vals = np.partition(vals,
+                            kth=max_n+1,
+                            axis=1)[:, :max_n+1]
+    old_vals = np.sort(old_vals, axis=1)
+
+    for x in n:
+        o = old_vals[:, 1:x+1].mean(1)
+        output.append(o)
 
     if len(output) == 1:
         output = output[0]
