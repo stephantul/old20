@@ -19,10 +19,11 @@ def old_all(words, show_progressbar=True):
 
 def old_subloop(words,
                 show_progressbar,
-                function=damerau_levenshtein_distance):
+                function=damerau_levenshtein_distance,
+                n=20):
     """Calculate the distance from each word to each other word."""
-    old_words = np.zeros((len(words), len(words)))
-
+    old_words = np.zeros((len(words), n)) + np.inf
+    maxes = np.max(old_words, 1)
     # Levenshtein distance is symmetric
     # So we only need to calculate the distance
     # between each pair once.
@@ -31,8 +32,14 @@ def old_subloop(words,
                      total=total,
                      disable=not show_progressbar):
         dist = function(words[a], words[b])
-        old_words[a, b] = dist
-        old_words[b, a] = dist
+        if maxes[a] > dist:
+            row = old_words[a]
+            row[np.argmax(row == maxes[a])] = dist
+            maxes[a] = np.max(row)
+        if maxes[b] > dist:
+            row = old_words[b]
+            row[np.argmax(row == maxes[b])] = dist
+            maxes[b] = np.max(row)
 
     return old_words
 
@@ -48,43 +55,27 @@ def old_n(words,
     ----------
     words : list
         A list of strings, representing all the types in your corpus.
-    n : list of ints
+    n : int
 
     Returns
     -------
     The old score for a given n.
 
     """
-    if isinstance(n, int):
-        n = [n]
-    if any([x <= 0 for x in n]):
-        raise ValueError("all values of n should be positive numbers.")
-    if any([len(words) <= x for x in n]):
+    if n <= 0:
+        raise ValueError("n should be positive.")
+    if len(words) <= n:
         raise ValueError("The number of words you have is lower than or equal "
-                         "to a value of n. Please lower n.")
+                         "to n. Please lower n.")
     if len(set(words)) != len(words):
         raise ValueError("There are duplicates in your dataset. Please remove"
                          " these, as they will make your estimates unreliable")
     vals = old_subloop(words,
                        show_progressbar,
-                       function)
+                       function,
+                       n)
 
-    output = []
-    max_n = max(n)
-
-    old_vals = np.partition(vals,
-                            kth=max_n+1,
-                            axis=1)[:, :max_n+1]
-    old_vals = np.sort(old_vals, axis=1)
-
-    for x in n:
-        o = old_vals[:, 1:x+1].mean(1)
-        output.append(o)
-
-    if len(output) == 1:
-        output = output[0]
-
-    return output
+    return dict(zip(words, np.sort(vals, axis=1).mean(1)))
 
 
 old20 = partial(old_n, n=20)
