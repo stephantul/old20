@@ -68,9 +68,14 @@ def old_n(words,
     The old score for a given n.
 
     """
-    if n <= 0:
+    one_n = isinstance(n, int)
+    if one_n:
+        n = np.array([n])
+    else:
+        n = np.asarray(n)
+    if np.any(n <= 0):
         raise ValueError("n should be positive.")
-    if len(words) <= n:
+    if np.any([len(words) <= x for x in n]):
         raise ValueError("The number of words you have is lower than or equal "
                          "to n. Please lower n.")
     if len(set(words)) != len(words):
@@ -79,9 +84,14 @@ def old_n(words,
     vals = old_subloop(words,
                        show_progressbar,
                        function,
-                       n)
+                       max(n))
 
-    return dict(zip(words, np.sort(vals, axis=1).mean(1)))
+    vals = np.sort(vals, axis=1)
+
+    if one_n:
+        return vals[:, :n[0]].mean(1)
+
+    return [vals[:, :x].mean(1) for x in n]
 
 
 old20 = partial(old_n, n=20)
