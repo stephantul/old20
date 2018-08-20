@@ -24,7 +24,7 @@ If you use the code in this repository, please cite the following paper:
 
 ```python
 import numpy as np
-from old20 import old20, old_subloop
+from old20 import old20
 # Assumes some wordlist.
 wordlist = open("mywords.txt").readlines()
 

@@ -5,6 +5,7 @@ from pyxdameraulevenshtein import damerau_levenshtein_distance
 from functools import partial
 from itertools import combinations
 from tqdm import tqdm
+from collections import defaultdict
 
 
 def num_combinations(n, k):
@@ -24,6 +25,7 @@ def old_subloop(words,
     """Calculate the distance from each word to each other word."""
     old_words = np.zeros((len(words), n)) + np.inf
     maxes = np.max(old_words, 1)
+    max_idx = defaultdict(int)
     # Levenshtein distance is symmetric
     # So we only need to calculate the distance
     # between each pair once.
@@ -34,12 +36,16 @@ def old_subloop(words,
         dist = function(words[a], words[b])
         if maxes[a] > dist:
             row = old_words[a]
-            row[np.argmax(row == maxes[a])] = dist
-            maxes[a] = np.max(row)
+            row[max_idx[a]] = dist
+            m = np.argmax(row)
+            max_idx[a] = m
+            maxes[a] = row[m]
         if maxes[b] > dist:
             row = old_words[b]
-            row[np.argmax(row == maxes[b])] = dist
-            maxes[b] = np.max(row)
+            row[max_idx[b]] = dist
+            m = np.argmax(row)
+            max_idx[b] = m
+            maxes[b] = row[m]
 
     return old_words
 
