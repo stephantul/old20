@@ -1,15 +1,8 @@
 """calculate the representation distance."""
 import argparse
 import os
-import unicodedata
 
-from .old20 import old20
-
-
-def normalize(string):
-    """Normalize, remove accents and other stuff."""
-    s = unicodedata.normalize("NFKD", string).encode('ASCII', 'ignore')
-    return s.decode('utf-8')
+from .old20 import old_n
 
 
 def write_scores(path, words, scores, overwrite):
@@ -24,7 +17,7 @@ def write_scores(path, words, scores, overwrite):
 
 if __name__ == "__main__":
 
-    parser = argparse.ArgumentParser(description="Calculate the rd20")
+    parser = argparse.ArgumentParser(description="Calculate the old20")
     parser.add_argument("-i", "--input", type=str,
                         help="The path to the input file.",
                         required=True)
@@ -32,7 +25,6 @@ if __name__ == "__main__":
                         help="The path to the output file.",
                         required=True)
     parser.add_argument("-n", metavar="n", type=int, required=True)
-    parser.add_argument("--normalize", type=bool, default=False)
     parser.add_argument("--overwrite",
                         const=True,
                         default=False,
@@ -53,7 +45,5 @@ if __name__ == "__main__":
             continue
         words.append(x.strip().split(args.sep)[args.loc])
 
-    if args.normalize:
-        words = [normalize(x) for x in words]
-    z = old20(words, [args.n])
+    z = old_n(words, [args.n])
     write_scores(args.output, words, z, args.overwrite)

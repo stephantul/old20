@@ -3,9 +3,13 @@ Calculate Yarkoni, Baloto & Yap's OLD20.
 
 * **Warning** this implementation of OLD20 uses the Damerau Levenshtein Distance instead of plain Levenshtein distance. This change has a small but non-significant effect in all experiments we ran. Nonetheless, it is important to be aware of the difference.
 
-* **Warning** this code is _slow_ compared to the [leven_c](http://speech.ilsp.gr/iplr/downloads.htm#leven) utility. If you just need OLD20 scores, use that one.
-
 The OLD20 distance is defined as the average Orthographic Levenshtein Distance (OLD) to the 20 closest neighbors for a given word in a given corpus.
+This is a multi-threaded version of OLD20 which uses a fast, cythonized version of the Levenshtein distance, although we support any function that takes two strings and outputs a distance between them.
+It can therefore also be used with the Levenshtein distances in `difflib` and `jellyfish`.
+
+* **Warning** this code is _slow_ compared to the [leven_c](http://speech.ilsp.gr/iplr/downloads.htm#leven) utility. If you just need OLD20 scores, use that one.
+As a comparison, `leven_c` takes about 14 seconds to process 10,000 words, while this implementation takes about 35 seconds on the same corpus.
+Our main speed bottleneck is the levenshtein distance calculation, which, even though we use [pyxDamerauLevenshtein](https://github.com/gfairchild/pyxDamerauLevenshtein), is still a lot slower than the Levenshtein calculation in `leven_c`.
 
 If you use the code in this repository, please cite the following paper:
 
@@ -26,13 +30,22 @@ If you use the code in this repository, please cite the following paper:
 
 ```python
 import numpy as np
-from old20 import old20
+from old20 import old20, old_n
 # Assumes some wordlist.
 wordlist = open("mywords.txt").readlines()
 
 words_neighborhood = old20(wordlist)
-```
 
+# Get multiple n
+words_neighborhood = old_n(wordlist, n=[20, 30, 40, 50])
+
+# Only calculate some words against a reference corpus.
+words_subset = old_n(wordlist[:100], wordlist, n=20)
+
+# Change the number of CPU jobs (the default is to use all cpus)
+words_neighborhood = old_n(wordlist, n_jobs=2)
+
+```
 
 ### Author
 
