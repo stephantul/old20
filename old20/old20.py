@@ -12,6 +12,8 @@ def calc_dist(a, words_b, n, function):
     max_val = np.inf
     row = np.zeros(n) + np.inf
     for b in words_b:
+        if a == b:
+            continue
         dist = function(a, b)
         if max_val > dist:
             row[max_idx] = dist
