@@ -1,15 +1,13 @@
 # old20
 Calculate Yarkoni, Baloto & Yap's OLD20.
 
-* **Warning** this implementation of OLD20 uses the Damerau Levenshtein Distance instead of plain Levenshtein distance. This change has a small but non-significant effect in all experiments we ran. Nonetheless, it is important to be aware of the difference.
-
 The OLD20 distance is defined as the average Orthographic Levenshtein Distance (OLD) to the 20 closest neighbors for a given word in a given corpus.
 This is a multi-threaded version of OLD20 which uses a fast, cythonized version of the Levenshtein distance, although we support any function that takes two strings and outputs a distance between them.
-It can therefore also be used with the Levenshtein distances in `difflib` and `jellyfish`.
+It can therefore also be used with the Levenshtein distances in `difflib` and `pyxdameraulevenshtein`.
 
 * **Warning** this code is _slow_ compared to the [leven_c](http://speech.ilsp.gr/iplr/downloads.htm#leven) utility. If you just need OLD20 scores, use that one.
 As a comparison, `leven_c` takes about 14 seconds to process 10,000 words, while this implementation takes about 35 seconds on the same corpus.
-Our main speed bottleneck is the levenshtein distance calculation, which, even though we use [pyxDamerauLevenshtein](https://github.com/gfairchild/pyxDamerauLevenshtein), is still a lot slower than the Levenshtein calculation in `leven_c`.
+Our main speed bottleneck is the levenshtein distance calculation, which, even though we use a fast implementation from [jellyfish](https://github.com/jamesturk/jellyfish), is still a lot slower than the Levenshtein calculation in `leven_c`.
 
 If you use the code in this repository, please cite the following paper:
 
