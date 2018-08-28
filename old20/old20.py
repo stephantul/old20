@@ -10,10 +10,8 @@ def calc_dist(a, words_b, n, function):
     """Sub for parallelization."""
     max_idx = 0
     max_val = np.inf
-    row = np.zeros(n) + np.inf
+    row = np.zeros(n+1) + np.inf
     for b in words_b:
-        if a == b:
-            continue
         dist = function(a, b)
         if max_val > dist:
             row[max_idx] = dist
@@ -29,7 +27,7 @@ def calc_all(a, words_b, n, function):
     row = np.zeros(len(words_b))
     for idx, b in enumerate(words_b):
         row[idx] = function(a, b)
-    return (a, np.sort(row)[1:])
+    return (a, row)
 
 
 def old_subloop(words_a,
@@ -38,7 +36,7 @@ def old_subloop(words_a,
                 n=20,
                 n_jobs=-1):
     """Calculate distance from each word in word_a to each word in word_b."""
-    if n == len(words_b):
+    if n >= len(words_b) - 1:
         job_func = calc_all
     else:
         job_func = calc_dist
@@ -94,7 +92,7 @@ def old_n(words,
                        max(n),
                        n_jobs)
 
-    vals = np.sort(vals, axis=1)
+    vals = np.sort(vals, axis=1)[:, 1:]
 
     if one_n:
         return vals[:, :n[0]].mean(1)
