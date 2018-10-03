@@ -59,11 +59,16 @@ def old_n(words,
     """
     Calculate the OLD distance for a given n.
 
+    n can be a number, or a list of numbers. If a list of numbers is passed,
+    the old_matrix is calculated and then truncated for each n.
+    This is therefore vastly faster than calling old_n with a single n in
+    a for loop.
+
     Parameters
     ----------
     words : list
         A list of strings, representing all the types in your corpus.
-    n : int
+    n : int or list of ints
 
     Returns
     -------
