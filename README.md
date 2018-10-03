@@ -5,8 +5,8 @@ The OLD20 distance is defined as the average Orthographic Levenshtein Distance (
 This is a multi-threaded version of OLD20 which uses a fast, cythonized version of the Levenshtein distance, although we support any function that takes two strings and outputs a distance between them.
 It can therefore also be used with the Levenshtein distances in `difflib` and `pyxdameraulevenshtein`.
 
-* **Warning** this code is _slow_ compared to the [leven_c](http://speech.ilsp.gr/iplr/downloads.htm#leven) utility. If you just need OLD20 scores, use that one.
-As a comparison, `leven_c` takes about 14 seconds to process 10,000 words, while this implementation takes about 35 seconds on the same corpus.
+* **Warning** this code is slower than the [leven_c](http://speech.ilsp.gr/iplr/downloads.htm#leven) utility. If you just need OLD20 scores, use that one.
+As a comparison, `leven_c` takes about 14 seconds to process 10,000 words, while this implementation takes about 21 seconds on the same corpus.
 Our main speed bottleneck is the levenshtein distance calculation, which, even though we use a fast implementation from [jellyfish](https://github.com/jamesturk/jellyfish), is still a lot slower than the Levenshtein calculation in `leven_c`.
 
 If you use the code in this repository, please cite the following paper:
