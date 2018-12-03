@@ -97,12 +97,12 @@ def old_n(words,
                        max(n),
                        n_jobs)
 
-    vals = np.sort(vals, axis=1)[:, 1:]
+    vals = np.sort(vals, axis=1)
 
     if one_n:
-        return vals[:, :n[0]].mean(1)
+        return vals[:, :n[0]].sum(1)
 
-    return [vals[:, :x].mean(1) for x in n]
+    return [vals[:, :x].sum(1) for x in n]
 
 
 old20 = partial(old_n, n=20)
