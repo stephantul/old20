@@ -100,9 +100,9 @@ def old_n(words,
     vals = np.sort(vals, axis=1)
 
     if one_n:
-        return vals[:, :n[0]].sum(1)
+        return vals[:, :n[0]+1].sum(1)
 
-    return [vals[:, :x].sum(1) for x in n]
+    return [vals[:, :x+1].sum(1) for x in n]
 
 
 old20 = partial(old_n, n=20)
